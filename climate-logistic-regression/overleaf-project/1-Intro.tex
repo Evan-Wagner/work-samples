@@ -1,0 +1,141 @@
+
+\section{Introduction}
+
+\par The facts of climate change are quite straightforward: the burning of fossil fuels is releasing enough heat-trapping gases into the atmosphere to significantly raise the average global temperature, unleashing consequences that will worsen if the trend is not reversed. However, not everyone is on the same page on these facts. For example, in a September 2017 survey of 1000 American adults,\cite{dset} only 64.6 percent believed that climate change is both real and caused by humans.
+
+\par \bigskip If we wish to reverse the climate crisis without sacrificing democracy, we need to get everyone on the same page. For starters, we should be able to explain belief in climate change with other factors. To do so, we will construct a logistic regression model using the aforementioned survey data to predict whether or not American adults believe in climate change.
+
+\par \bigskip Our goal is to answer the following questions of interest.
+
+\begin{enumerate}
+    \item How do changes in our variables affect the odds that an American adult believes in anthropogenic climate change?
+    \item How accurately can our model predict the likelihood that various profiles of American adults believe in anthropogenic climate change?
+\end{enumerate}
+
+\subsection{Data Preparation}
+
+\par Our data was collected in a live-caller poll (including both landlines and cell phones) by Survey Sampling International, a research firm, and Cards Against Humanity, a card game company. Table \ref{tab:data_raw} lists the questions asked in the survey, along with variable names created by the author.
+
+\par \bigskip We first eliminate the variables $PartyAffil$ and $TrumpJobApprove$. Climate change belief is highly polarized, so we would already expect these variables to be highly predictive and potentially crowd out other significant variables. On top of that, politics are more contextual and temporary than the more apolitical variables.
+
+\par \bigskip Next, we remove rows with missing values for one or more of our quantitative variables: $Income$, $Age$, $BooksInPastYear$, and $EstPctFedBudgetForScience$. Unfortunately, the data was missing over half the entries for $Income$ and about 300 for $EstPctFedBudgetForScience$, so including either of those variables would sacrifice too much predictive power.
+
+\newpage
+
+\par \bigskip We convert each of our categorical variables to binary by removing the level ``DK/REF", which indicates either indecision or refusal to answer, and sorting the remaining levels into two groups. Encountering too many ``DK/REF" answers for $EarthFartherInWinter$ and $FedFundingScienceTooHighOrLow$, we drop them both. We also scrap the 6-level categorical variable $AgeRange$, as $Age$ is a quantitative predictor that we can expect to have similar or better predictive power than just two age groups. Our final trimmed dataset includes 656 observations of 13 variables and is presented in Table \ref{tab:data_trimmed}.
+
+\vspace{.2in}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|l|}
+        \hline
+        \textbf{Variable} & \textbf{Levels} \\
+        \hline
+        \hline
+        $Age$ & quantitative\\
+        \hline        $BooksInPastYear$ & quantitative\\
+        \hline
+        \hline
+        $Male$ & 1 if $Gender$ = ``Male",\\
+        & 0 if $Gender$ = ``Female"\\
+        \hline
+        $College$ & 1 if respondent holds $\ge$ BA,\\
+        & 0 otherwise\\
+        \hline
+        $Married$ & 1 if $Married$ = ``Married",\\
+        & 0 otherwise\\
+        \hline
+        $JobWillBeAutomated$ & 1 if $JobWillBeAutomated$ = ``Likely",\\
+        & 0 if $JobWillBeAutomated$ = ``Unlikely"\\
+        \hline
+        $AnthClimateChangeReal$ & 1 if $ClimateChangeReal$ = ``Real and Caused by People",\\
+        & 0 otherwise\\
+        \hline
+        $HasSeenTransformers$ & 1 if $TransformersMoviesSeen \ge 1$,\\
+        & 0 if $TransformersMoviesSeen$ = 0\\
+        \hline
+        $ScientistsGood$ & 1 if $ScientistsGood$ = ``Somewhat Agree" or ``Strongly Agree",\\
+        & 0 otherwise\\
+        \hline
+        $VaccinesGood$ & 1 if $VaccinessGood$ = ``Somewhat Agree" or ``Strongly Agree",\\
+        & 0 otherwise\\
+        \hline
+        $BelievesInGhosts$ & 1 if $BelievesInGhosts$ = ``Yes",\\
+        & 0 if $BelievesInGhosts$ = ``No"\\
+        \hline
+        $SmartSadDumbHappy$ & 1 if $SmartSadDumbHappy$ = ``Smart and Sad",\\
+        & 0 if $SmartSadDumbHappy$ = ``Dumb and happy"\\
+        \hline
+        $ShowerPeeingOk$ & 1 if $ShowerPeeingOk$ = ``Acceptable",\\
+        & 0 if $ShowerPeeingOk$ = ``Unacceptable"\\
+        \hline
+    \end{tabular}
+    \caption{Our final dataset}
+    \label{tab:data_trimmed}
+\end{table}
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|l|}
+        \hline
+        \textbf{Variable} & \textbf{Question} \\
+        \hline
+        $Gender$ & Gender\\
+        \hline
+        $Age$ & Age\\
+        \hline
+        $PartyAffil$ & Political Affiliation\\
+        \hline
+        $TrumpJobApprove$ & Do you approve or disapprove of how Donald\\
+        & Trump is handling his job as president?\\
+        \hline
+        $Educ$ & What is your highest level of education?\\
+        \hline
+        $Race$ & What is your race?\\
+        \hline
+        $Married$ & What is your marital status?\\
+        \hline
+        $JobWillBeAutomated$ & What would you say is the likelihood that your\\
+        & current job will be entirely performed by robots\\
+        & or computers within the next decade?\\
+        \hline
+        $ClimateChangeReal$ & Do you believe that climate change is real and\\
+        & caused by people, real but not caused by people,\\
+        & or not real at all?\\
+        \hline
+        $TransformersMoviesSeen$ & How many Transformers movies have you seen?\\
+        \hline
+        $ScientistsGood$ & Do you agree or disagree with the following\\
+        & statement: scientists are generally honest and are\\
+        & serving the public good.\\
+        \hline
+        $VaccinesGood$ & Do you agree or disagree with the following\\ 
+        & statement: vaccines are safe and protect children\\
+        & from disease.\\
+        \hline
+        $BooksInPastYear$ & How many books, if any have you read in the past\\
+        & year?\\
+        \hline
+        $BelievesInGhosts$ & Do you believe in ghosts?\\
+        \hline
+        $EstPctFedBudgetForScience$ & What percentage of the federal budget would you\\
+        & estimate is spent on scientific research?\\
+        \hline
+        $FedFundingScienceTooHighOrLow$ & Is federal funding of scientific research too high,\\
+        & too low, or about right?\\
+        \hline
+        $EarthFartherInWinter$ & True or false: the earth is always farther away\\
+        & from the sun in the winter than in the summer.\\
+        \hline
+        $SmartSadDumbHappy$ & If you had to choose: would you rather be smart\\
+        & and sad or dumb and happy?\\
+        \hline
+        $ShowerPeeingOk$ & Do you think it is acceptable or unacceptable to\\
+        & urinate in the shower?\\
+        \hline
+    \end{tabular}
+    \caption{Potential variables from our raw dataset}
+    \label{tab:data_raw}
+\end{table}
