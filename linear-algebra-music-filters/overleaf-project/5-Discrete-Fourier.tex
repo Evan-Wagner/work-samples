@@ -1,0 +1,137 @@
+
+\newpage
+
+\section{The Discrete Fourier Transform}
+
+\par \indentt Analog filters are useful for conceptualization, but one more consideration is necessary to make filtering practical. Today's musicians work in the realm of digital sound, where discrete units of digital information must somehow be substituted for the continuous function $f(t)$. To do so, we can make $N$ measurements of the amplitude $f(t)$ uniformly across the period $T$, starting at $t = 0$ and ending at $t = \frac{(N-1)T}{N}$.\footnote{Note that $f(\frac{NT}{N}) = f(T) = f(0)$, so $t = \frac{(N-1)T}{N}$ is the last meaningful timestamp to sample.} These samples form the $N$ terms of a \textbf{sample vector}.
+
+\begin{example}{The sample vector for some $T$-periodic function $f(t)$ is}
+    $$\vecv = \begin{bmatrix}
+                f(0)\\
+                f(\frac{T}{N})\\
+                f(\frac{2T}{N})\\
+                \vdots\\
+                f(\frac{kT}{N})\\
+                \vdots\\
+                f(\frac{(N-2)T}{N})\\
+                f(\frac{(N-1)T}{N})
+    \end{bmatrix}.$$
+\end{example}
+
+\par In order to bring a sample vector into the frequency domain and apply filters to it, we must perform some sort of \textbf{discrete Fourier transform (DFT)}. We are looking for an $N\times N$ matrix that a vector of $N$ samples can be multiplied by to produce a vector of $N$ complex Fourier coefficients, also known as a \textbf{frequency response vector}.
+
+\par \bigskip First, we find the sample vector for the pure tone $f(t) = \puretone{nt}{T}$ and normalize it with $\frac{1}{\sqrt{N}}$:
+
+\begin{example}
+    The sample vector for the $n$'th pure tone in $\FNT$ is
+    
+    $$\phi_n = \frac{1}{\sqrt{N}} \{1,\puretone{n}{N},\puretone{2n}{N},...,\puretone{kn}{N},...,\puretone{(N-2)n}{N},\puretone{(N-1)n}{N}\}.$$
+\end{example}
+
+\par Together, the pure tone vectors $\{\phi_n\}_{n=0}^{N-1}$ form the \mathbf{$N$}\textbf{-point Fourier basis} $\FN$. To prove than $\FN$ is an orthonormal basis for $\complex^n$, we use the complex Euclidean inner product:
+
+\begin{definition}
+    The complex Euclidean inner product is
+    $$\innerprod{\vecv}{\vecw} = \overline{\vecw}^T\vecv = \sum_{k=0}^{N-1} v_k\overline{w_k} \hspace{.5in} \text{where } \overline{\vecw}^T \text{ is the conjugate transpose of } \vecw.\cite{Zhang}$$
+\end{definition}
+
+
+
+\begin{lemma}
+    The Euclidean inner product of any two unique vectors in $\FN$ is 0.\\
+    
+    \begin{proof}
+        Consider arbitrary $\phi_{n_1},\phi_{n_2} \in \FNT$ such that $\phi_{n_1} \not= \phi_{n_2}$. Then $\phi_{n_1} = \puretone{n_1k}{N}$ and $\phi_{n_2} = \puretone{n_2k}{N}$ for some $0 \le n_1,n_2 \le N-1$ such that $n_1 \not= n_2$. We see that 
+    
+        \[
+           \innerprod{\phi_{n_1}}{\phi_{n_2}} = (\frac{1}{\sqrt{N}})^2 \sum_{k=0}^{N-1} \puretone{n_1k}{N}\overline{\puretone{n_2k}{N}} = \frac{1}{N} \sum_{k=0}^{N-1} \puretone{(n_1-n_2)k}{N}.
+        \]
+        
+        Since $\sum_{k=0}^{N-1} \puretone{(n_1-n_2)k}{N}$ is a geometric series with common ratio $\puretone{(n_1-n_2)}{N}$, we see that
+        
+        \begin{multline*}
+            \frac{1}{N} \sum_{k=0}^{N-1} \puretone{(n_1-n_2)k}{N} = \frac{1}{N} \bigg(\frac{1-\puretone{(n_1-n_2)N}{N}}{1-\puretone{(n_1-n_2)}{N}}\bigg) = \frac{1}{N} \bigg(\frac{1-e^{2\pi i(n_1-n_2)}}{1-\puretone{(n_1-n_2)}{N}}\bigg)\\ = \frac{1}{N} \bigg(\frac{1-(\cos(2\pi(n_1-n_2))+i\sin(2\pi(n_1-n_2)))}{1-\puretone{(n_1-n_2)}{N}}\bigg) = \frac{1}{N} \bigg(\frac{1-(1+0)}{1-\puretone{(n_1-n_2)}{N}}\bigg) = 0.
+        \end{multline*}
+    \end{proof}
+
+    \label{lem:FN_is_ortho}
+\end{lemma}
+
+\newpage
+
+\begin{lemma}
+    The Euclidean inner product of any vector in $\FN$ with itself is 1.\\
+    
+    \begin{proof}
+        Consider arbitrary $\phi_{n_0} \in \FNT$. Then $\phi_{n_0} = \puretone{n_0k}{N}$ for some $0 \le n_0 \le N-1$. We see that 
+        
+        \begin{multline*}
+            \innerprod{\phi_{n_0}}{\phi_{n_0}} = (\frac{1}{\sqrt{N}})^2 \sum_{k=0}^{N-1} \puretone{n_0k}{N}\overline{\puretone{n_0k}{N}} = \frac{1}{N} \sum_{k=0}^{N-1} \puretone{(n_0-n_0)k}{N}\\
+            = \frac{1}{N} \sum_{k=0}^{N-1} e^{0} = \frac{1}{N} \sum_{k=0}^{N-1} 1 = \frac{1}{N}(N) = 1.
+        \end{multline*}
+    \end{proof}
+    
+    \label{lem:FN_is_normal}
+\end{lemma}
+
+\par Since $\FN$ is orthonormal, its vectors form a basis for $\VNT$. Consider the matrix $A$ whose columns are the pure tone vectors in $\FN$:
+
+\begin{example}
+    The matrix of pure tone vectors $\{\phi_n\}_{n=0}^{N-1}$ is
+    
+    $$A = \frac{1}{\sqrt{N}} \begin{bmatrix}
+        1 & 1 & 1 & \hdots & 1 & \hdots & 1\\
+        1 & e^{\frac{2\pi i}{N}} & e^{\frac{4\pi i}{N}} & \hdots & e^{\frac{2\pi in}{N}} & \hdots & e^{\frac{2\pi i(N-1)}{N}}\\
+        1 & e^{\frac{4\pi i}{N}} & e^{\frac{8\pi i}{N}} & \hdots & e^{\frac{4\pi in}{N}} & \hdots & e^{\frac{4\pi i(N-1)}{N}}\\
+        \vdots & \vdots & \vdots & \ddots & & & \vdots\\
+        1 & e^{\frac{2\pi ik}{N}} & e^{\frac{4\pi ik}{N}} & & e^{\frac{2\pi ink}{N}} & & e^{\frac{2\pi i(N-1)k}{N}}\\
+        \vdots & \vdots & \vdots & & & \ddots & \vdots\\
+        1 & e^{\frac{2\pi i(N-1)}{N}} & e^{\frac{4\pi i(N-1)}{N}} & \hdots & e^{\frac{2\pi in(N-1)}{N}} & \hdots & e^{\frac{2\pi i(N-1)^2}{N}}\\
+    \end{bmatrix}.$$
+    \label{ex:invF_N}
+\end{example}
+
+\par Multiplying a vector of amplitudes by this matrix $A$ is a change of coordinates from $\VNT$ to discrete time. Then its inverse $A^{-1}$ changes coordinates in the other direction, from the discrete-time domain to the frequency domain. This latter matrix we will call $F_N$, or the $N\times N$ Fourier matrix.
+
+\par \bigskip To find $F_N = A^{-1}$, we recognize that multiplying $A$ by its conjugate transpose $\overline{A}^T$ produces a matrix whose entries are the complete set of inner products of the pure tone vectors in $\FN$. Lemmas \ref{lem:FN_is_ortho} and \ref{lem:FN_is_normal} tell us that this matrix is simply the $N\times N$ identity matrix:
+
+\begin{example}
+    \begin{multline*}
+        A\overline{A}^T = \begin{bmatrix}
+            \innerprod{\phi_0}{\phi_0} & \innerprod{\phi_1}{\phi_0} & \innerprod{\phi_2}{\phi_0} & \hdots & \innerprod{\phi_n}{\phi_0} & \hdots & \innerprod{\phi_{N-1}}{\phi_0} \\
+            \innerprod{\phi_0}{\phi_1} & \innerprod{\phi_1}{\phi_1} & \innerprod{\phi_2}{\phi_1} & \hdots & \innerprod{\phi_n}{\phi_1} & \hdots & \innerprod{\phi_{N-1}}{\phi_1} \\
+            \innerprod{\phi_0}{\phi_2} & \innerprod{\phi_1}{\phi_2} & \innerprod{\phi_2}{\phi_2} & \hdots & \innerprod{\phi_n}{\phi_2} & \hdots & \innerprod{\phi_{N-1}}{\phi_2} \\
+            \vdots & \vdots & \vdots & \ddots & & & \vdots \\
+            \innerprod{\phi_0}{\phi_n} & \innerprod{\phi_1}{\phi_n} & \innerprod{\phi_2}{\phi_n} & & \innerprod{\phi_n}{\phi_n} & & \innerprod{\phi_{N-1}}{\phi_n} \\
+            \vdots & \vdots & \vdots & & & \ddots & \vdots \\
+            \innerprod{\phi_0}{\phi_{N-1}} & \innerprod{\phi_1}{\phi_{N-1}} & \innerprod{\phi_2}{\phi_{N-1}} & \hdots & \innerprod{\phi_n}{\phi_{N-1}} & \hdots & \innerprod{\phi_{N-1}}{\phi_{N-1}}\\
+        \end{bmatrix} \\= \begin{bmatrix}
+            1 & 0 & 0 & \hdots & 0 & \hdots & 0 \\
+            0 & 1 & 0 & \hdots & 0 & \hdots & 0 \\
+            0 & 0 & 1 & \hdots & 0 & \hdots & 0 \\
+            \vdots & \vdots & \vdots & \ddots & & & \vdots \\
+            0 & 0 & 0 & & 1 & & 0 \\
+            \vdots & \vdots & \vdots & & & \ddots & \vdots \\
+            0 & 0 & 0 & \hdots & 0 & \hdots & 1\\
+        \end{bmatrix} = I.
+    \end{multline*}
+\end{example}
+
+Thus $\overline{A}^T = A^{-1} = F_N$. In other words, $A$ is unitary.\cite{Zhang} Now we can say that $F_N = \overline{A}^T$ and find it easily: 
+
+\begin{definition}
+    The $N\times N$ Fourier matrix is
+    
+    $$F_N = \frac{1}{\sqrt{N}} \begin{bmatrix}
+        1 & 1 & 1 & \hdots & 1 & \hdots & 1\\
+        1 & e^{-\frac{2\pi i}{N}} & e^{-\frac{4\pi i}{N}} & \hdots & e^{-\frac{2\pi ik}{N}} & \hdots & e^{-\frac{2\pi i(N-1)}{N}}\\
+        1 & e^{-\frac{4\pi i}{N}} & e^{-\frac{8\pi i}{N}} & \hdots & e^{-\frac{4\pi ik}{N}} & \hdots & e^{-\frac{4\pi i(N-1)}{N}}\\
+        \vdots & \vdots & \vdots & \ddots & & & \vdots\\
+        1 & e^{-\frac{2\pi in}{N}} & e^{-\frac{4\pi in}{N}} & & e^{-\frac{2\pi ink}{N}} & & e^{-\frac{2\pi in(N-1)}{N}}\\
+        \vdots & \vdots & \vdots & & & \ddots & \vdots\\
+        1 & e^{-\frac{2\pi i(N-1)}{N}} & e^{-\frac{4\pi i(N-1)}{N}} & \hdots & e^{-\frac{2\pi i(N-1)k}{N}} & \hdots & e^{-\frac{2\pi i(N-1)^2}{N}}\\
+    \end{bmatrix}.$$
+    \label{defn:F_N}
+\end{definition}
+
+\par The matrix given in Example \ref{ex:invF_N} is, of course, $F^{-1}_N$. Multiplying a frequency response vector by $F^{-1}_N$ to produce a sample vector is called the \textbf{inverse discrete Fourier transform (IDFT)}, which is just as important for the digital filtering process.

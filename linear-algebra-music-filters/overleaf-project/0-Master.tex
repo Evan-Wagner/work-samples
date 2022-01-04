@@ -1,0 +1,102 @@
+\documentclass[12pt,titlepage]{article}
+\usepackage[margin=1.2in]{geometry}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+% \hypersetup{
+%     colorlinks=true,
+%     linkcolor=blue,
+%     filecolor=magenta,      
+%     urlcolor=cyan,
+%     pdftitle={Overleaf Example},
+%     pdfpagemode=FullScreen,
+%     }
+\usepackage[dvipsnames]{xcolor}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\realn}[1]{\mathbb{R}^{#1}}
+\newcommand{\infsum}[3]{\sum_{i=#1}^{#2} \left(#3\right)^{i}}
+\newcommand{\forward}{\noindent ($\Longrightarrow$) \,\,}
+\newcommand{\back}{\noindent ($\Longleftarrow$) \,\,}
+
+\newcommand{\vecu}{\mathbf{u}}
+\newcommand{\vecv}{\mathbf{v}}
+\newcommand{\vecw}{\mathbf{w}}
+\newcommand{\vecz}{\mathbf{0}}
+\newcommand{\VNT}{V_{N,T}}
+\newcommand{\DNT}{\mathcal{D}_{N,T}}
+\newcommand{\FNT}{\mathcal{F}_{N,T}}
+\newcommand{\FN}{\mathcal{F}_N}
+\newcommand{\puretone}[2]{e^{\frac{2 \pi i #1}{#2}}}
+\newcommand{\innerprod}[2]{\langle #1,#2 \rangle}
+
+\newcommand{\indentt}{\hspace{.19in}}
+
+\newenvironment{solution}{\noindent {\em Solution:} \\}{\hfill
+\rule{1mm}{3mm}\bigskip}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}{Definition}[subsection]
+\newtheorem{question}[definition]{Question to Ponder}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{exercise}[definition]{Exercise}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{proposition}[definition]{Proposition}
+
+\renewcommand{\qedsymbol}{\rule{1mm}{3mm}}
+\begin{document}
+
+\title{Musical Filters: The Linear Algebra Perspective}
+\author{Evan Wagner}
+\maketitle
+
+\tableofcontents
+
+\vspace{.2in}
+
+$$***$$
+
+\vspace{.2in}
+
+\par \noindent CAUTION: This paper includes links to audio files. Some of the sounds are abrasive and can cause discomfort when played loudly. Make sure your audio is turned to a very low setting before you click a link, then adjust up if necessary. It's much better to not hear it the first time than to take a loud sawtooth wave point blank to the eardrum.
+
+\par \bigskip \noindent If you are extra curious, here are links to the \href{https://drive.google.com/drive/folders/16oMcnn9lQVPj5wKAWLB81FRDqUVUpard?usp=sharing}{\color{blue} entire Drive folder of audio files} and the \href{https://docs.google.com/document/d/1_Np-1anndUBNAp1EMfoEQONGKTgCt1KJEKgOH2-CGKg/edit?usp=sharing}{\color{blue} MATLAB code} used to generate example audio and figures.
+
+\par \bigskip \noindent I would like to thank Profs. Marie Snipes, Adam Lizzi, Judy Holdener, Bob Milnikel, Pamela Pyzza, and Carol Schumacher for their indispensable guidance throughout the capstone process.
+
+\newpage
+
+\input 1-Intro.tex
+
+\input 2-Real-Fourier.tex
+
+\input 3-Complex-Fourier.tex
+
+\input 4-Analog-Filters.tex
+
+\input 5-Discrete-Fourier.tex
+
+\input 6-Digital-Filters.tex
+
+\vspace{1in}
+
+\begin{thebibliography}{99}
+    \bibitem{Pierce} J. Pierce, ``Chapter 4: Sound Waves and Sine Waves." From {\em Music, Cognition, and Computerized Sound.} MIT Press, Cambridge, MA, 1999.
+    \bibitem{Ryan} O. Ryan, {\em Linear Algebra, Signal Processing, and Wavelets -- A Unified Approach.} Springer, London, UK, 2019.
+    \bibitem{Zhang} F. Zhang, {\em Matrix Theory.} Springer, New York, NY, 2011.
+    \bibitem{Bretscher} O. Bretscher, {\em Linear Algebra with Applications.} Fifth ed., Pearson, Upper Saddle River, NJ, 2013.
+\end{thebibliography}
+
+\end{document}
