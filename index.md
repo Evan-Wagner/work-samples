@@ -1,4 +1,4 @@
-# My Work Samples
+Thank you for checking out my portfolio! Here is some of my best work:
 
 ## Statistics
 
