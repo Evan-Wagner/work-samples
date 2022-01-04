@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
+# My Work Samples
 
-You can use the [editor on GitHub](https://github.com/Evan-Wagner/work-samples/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Statistics
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- I applied logistic regression techniques to a 2017 live-caller opinion survey to explore belief in human-caused climate change among U.S. adults.
+  - Built models and produced figures with an [R script](https://github.com/Evan-Wagner/work-samples/tree/main/climate-logistic-regression/climate_logistic_regression.R)
+  - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/climate-logistic-regression/overleaf-project)
+  - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/climate-logistic-regression/climate_logistic_regression.pdf)
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+- Using a dataset of all documented fatal police encounters from the year 2015, I compared nonparametric (distribution-free) statistical methods to their more common normality-assuming counterparts.
+  - Analyzed data and produced figures with an [R script](https://github.com/Evan-Wagner/work-samples/tree/main/police-killings-nonparametric/police_killings_nonparametric.R)
+  - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/police-killings-nonparametric/overleaf-project)
+  - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/police-killings-nonparametric/police_killings_nonparametric.pdf)
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+## Applied Linear Algebra
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Evan-Wagner/work-samples/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+- I wrote my capstone paper for Kenyon College's Mathematics major on the linear algebra underlying waveform filters used in music production.
+  - Produced figures and audio with [MATLAB](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.m)
+  - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/overleaf-project)
+  - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.pdf)
