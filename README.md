@@ -20,3 +20,9 @@
   - Produced figures and audio with [MATLAB](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.m)
   - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/overleaf-project)
   - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.pdf)
+
+## Programming
+
+- When the Kenyon College Writing Center moved online due to COVID, I created an automated sign-up and logging system for remote appointments. After the school returned to in-person learning, I added functionality for in-person appointments as well.
+  - Designed a spreadsheet with two displays: an interactive calendar where students could sign up for appointments, and a log of information about previous appointments
+  - Automated the process of logging appointments, emailing relevant parties, cancelling appointments, and substituting consultants for specific shifts using Google's [Apps Script API]()
