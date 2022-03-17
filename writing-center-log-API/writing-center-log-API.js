@@ -1,3 +1,4 @@
+
 const MILLIS_PER_DAY = 1000*60*60*24;
 const MILLIS_PER_HALF_HOUR = 1000*60*30;
 
@@ -5,12 +6,12 @@ const MILLIS_PER_HALF_HOUR = 1000*60*30;
 // so you don't have to go through the code and change every line!
 
 // folders
-const folderSpring22 = DriveApp.getFolderById('1YvTA_K3Xbp3mIESC6plUX85OoJ98r167');
+const folderSpring22 = DriveApp.getFolderById('*********************************');
 
-const folderRemoteSignupForms = DriveApp.getFolderById('1ARwgP0FJq-bpzsBNbhh7Sv-tBwfO1Owz');
-const folderSubForms = DriveApp.getFolderById('1ILBh-IY8Ij5fs7nrPxDdHn5pdKOC5NUP');
-const folderCancelForm = DriveApp.getFolderById('1pXk5Sg5XngOxijth7hS7Xr6lBhHJI1S-');
-const folderBackups = DriveApp.getFolderById('1f6ZIFeEUmuKjjNBnmP_KyITUeouPP6uV');
+const folderRemoteSignupForms = DriveApp.getFolderById('*********************************');
+const folderSubForms = DriveApp.getFolderById('*********************************');
+const folderCancelForm = DriveApp.getFolderById('*********************************');
+const folderBackups = DriveApp.getFolderById('*********************************');
 
 // the spreadsheet named "Writing Center Sign-Up S22"
 const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -36,7 +37,7 @@ const rangeStaticInPerson = sheetSchedule.getRange('A19:G35');
 // sheet that logs form responses
 const sheetLog = ss.getSheetByName('Log');            
 
-//column indexes in sheetLog
+// column indexes in sheetLog
 const colTimestamp = 1;
 const colMode = 2;
 const colDate = 3;
@@ -54,10 +55,10 @@ const colVideo = 14;
 const colCancelForm = 15;
 const colStatus = 16;
 
-// list of consultant names and emails, etc.
+// sheet that displauys a list of consultant names and emails, the sub request form and sub confirm forms, liaison names and other info
 const sheetInput = ss.getSheetByName('Inputs');
 
-//column indexes in sheetInput
+// column indexes in sheetInput
 const colConsNameInput = 1;
 const colConsEmailInput = 2;
 const colDeptInput = 3;
@@ -90,7 +91,7 @@ function getColumnAsList(sheet, col, firstRow = 2, lastRow = sheet.getLastRow())
 }
 
 
-// takes a cell; finds the name it contains, its time row, and its day of the week column;
+// takes a single-cell range; finds the name it contains, its time row, and its day of the week column;
 // creates a sign-up form based on that information; puts the form's link in the input cell
 function createRemoteSignUpForm(cell) {
   if (cell.isBlank()==false && cell.getRichTextValue().getLinkUrl()==null) {
@@ -239,7 +240,7 @@ function createCancelForm(row) {
     .setTitle("If you chose the second option, what is the correct info for this appointment?")
     .setRequired(false);
 
-  return form.getEditUrl(); // FIX: make it put the url in the cell
+  return form.getEditUrl();
 }
 
 
@@ -324,6 +325,7 @@ function sendEmail(row) {
   }
 }
 
+// takes a single-cell range; resets its RichText to not include a link
 function removeLink(cell) {
   var str = cell.getValue();
   var newText = SpreadsheetApp.newRichTextValue()
@@ -369,6 +371,10 @@ function isBeforeCurrentDate(date) {
 }
 
 
+// takes a multi-cell range containing remote signup links; checks for form responses in each link;
+// if somebody signed up for an appointment, calls createEvent() to make a calendar appointment and sendEmail() to email the consultant & consultee;
+// calls removeLink() to remove the link from the cell;
+// if nobody signed up for the appointment but the day of the shift has passed, removes the link
 function logRemoteAppointments(range) {
   var numCols = range.getNumColumns();
   var numRows = range.getNumRows();
@@ -431,6 +437,7 @@ function logRemoteAppointments(range) {
   }
 }
 
+// takes a Form; removes all its items
 function clearForm(form) {
   while (form.getItems().length>0) {
     form.deleteItem(0);
@@ -439,6 +446,7 @@ function clearForm(form) {
   return form;
 }
 
+// checks the cell that contains the link to the Form for walk-in appointments; if it isn't there, generates a new one
 function generateInPersonLogForm() {
   var cell = sheetInput.getRange(1, colInPersonFormInput);
   var editLink = cell.getRichTextValue().getLinkUrl();
@@ -538,6 +546,7 @@ function generateInPersonLogForm() {
   cell.setRichTextValue(richText);
 }
 
+// checks the walk-in Form for responses; logs each one and marks it as viewed (using the quiz grading feature of Forms)
 function logInPersonAppointments() {
   var cell = sheetInput.getRange(1, colInPersonFormInput);
   var editLink = cell.getRichTextValue().getLinkUrl();
@@ -608,6 +617,7 @@ function logInPersonAppointments() {
   }
 }
 
+// takes a Date object and consultant name; finds the cell containing the associated appointment
 function findShift(dateTime, consName) {
   var cell;
   var tf = ss.createTextFinder(consName);
@@ -631,7 +641,7 @@ function findShift(dateTime, consName) {
   return cell;
 }
 
-//checks each cancel form; if response found, marks the appointment as "CANCELED" or "INFO WRONG"
+// checks each cancel form; if response found, marks the appointment as "CANCELED" or "INFO WRONG"
 function checkForCancels() { 
   for (var row=2; row<=sheetLog.getLastRow(); ++row) {
     getAppointmentInfo(row);
@@ -669,6 +679,7 @@ function checkForCancels() {
   }
 }
 
+// checks the cell containing the link to the substitute form; if it isn't there, generates a new one
 function generateSubForm() {
   var cell = sheetInput.getRange(1, colSubFormsInput);
   var editLink = cell.getRichTextValue().getLinkUrl();
@@ -719,6 +730,8 @@ function generateSubForm() {
   form.deleteAllResponses();
 }
 
+// takes info related to a shift someone wants to sub in for: a Date object, whether the shift is remote or in-person, and the substitute's name;
+// creates a form for the sub to confirm that they will take over the shift
 function createSubConfirmForm(dateTime, mode, subName) {
   var formattedDateTime = formatDate(dateTime, includeTime=true);
   var form = FormApp.create("Confirm Substitution: "+formattedDateTime)
@@ -744,6 +757,8 @@ function createSubConfirmForm(dateTime, mode, subName) {
   return form.getEditUrl();
 }
 
+// checks the sub form for responses; for each new request, calls createSubConfirmForm(); adds the link to the confirm form column;
+// emails the confirm form link to the substitute; marks the response as read
 function checkForSubRequests() {
   var editUrl = sheetInput.getRange(1, colSubFormsInput).getRichTextValue().getLinkUrl();
   if (editUrl==null) {
@@ -798,6 +813,7 @@ function checkForSubRequests() {
   }
 }
 
+// takes a Date object; returns true if there is an appointment associated with that date and time
 function hasAppointment(thisDateObject) {
   var hasAppointment = false;
   for (var row=2; row<=sheetLog.getLastRow(); ++row) {
@@ -813,6 +829,9 @@ function hasAppointment(thisDateObject) {
   return hasAppointment;
 }
 
+// checks each link in the confirm form column; if it has a correct response, finds the shift & replaces the original consultant's name with the new one;
+// if the shift is remote, calls createRemoteSignUpForm(); if someone already signed up for an appointment for that shift, emails them to let them know;
+// clears the cell with the confirm form link
 function checkForSubConfirms() {
   var list = getColumnAsList(sheetInput, colSubFormsInput);
   for (var i=0; i<list.length; ++i) {
@@ -876,6 +895,8 @@ function checkForSubConfirms() {
   }
 }
 
+// this function is triggered every 5 minutes.
+// logs all new appointments; checks for cancellations and substitutions
 function updateLog() {
   logInPersonAppointments();
   
@@ -887,6 +908,7 @@ function updateLog() {
   checkForSubConfirms();
 }
 
+// saves a copy of the spreadsheet in its current state to a folder
 function backUpLog() {
   var date = new Date();
   var formattedDate = formatDate(date, includeTime=true);
@@ -894,6 +916,9 @@ function backUpLog() {
   DriveApp.getFileById(backupSS.getId()).moveTo(folderBackups);
 }
 
+// this function is triggered every Sunday.
+// if the current day is the first day of next week's schedule, backs up log; copies next week's schedule to this week's schedule;
+// creates next week's schedule; fills the remote shift section with appointment signup forms
 function refreshSignupSheet() { 
   var date = rangeNextWeekRemote.getCell(1, 2).getValue();
   var today = new Date();
