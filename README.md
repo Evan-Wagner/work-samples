@@ -27,3 +27,9 @@
   - Produced figures and audio with [MATLAB](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.m)
   - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/overleaf-project)
   - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/linear-algebra-music-filters/linear_algebra_music_filters.pdf)
+
+## Combinatorics
+
+- My final project explored the maximum cut problem, giving Hadlock's P-solution for planar graphs and the Goemans-Williamson NP-approximation for the general problem.
+  - Wrote the paper in [Overleaf](https://github.com/Evan-Wagner/work-samples/tree/main/graph-theory-max-cut/overleaf-project)
+  - Compiled the paper to a [PDF](https://github.com/Evan-Wagner/work-samples/tree/main/graph-theory-max-cut/graph-theory-max-cut.pdf)
