@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{floatrow}
+\usepackage{blindtext}
+\usepackage[T1]{fontenc}
+\usepackage[font=small,labelfont=bf,tableposition=top]{caption}
+\usepackage[export]{adjustbox}
+
+\DeclareCaptionLabelFormat{andtable}{#1~#2  \&  \tablename~\thetable}
+
+\newcommand{\stirlingone}[2]{\begin{bmatrix} #1\\#2 \end{bmatrix}}
+\newcommand{\stirlingtwo}[2]{\begin{Bmatrix} #1\\#2 \end{Bmatrix}}
+
+\newtheorem{definition}{Definition}[subsection]
+\newtheorem{question}[definition]{Question to Ponder}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{exercise}[definition]{Exercise}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{proposition}[definition]{Proposition}
+
+\title{Combinatorics Final Project: \\ The Max-Cut Problem}
+\author{Evan Wagner}
+\date{April 2022}
+
+\begin{document}
+
+\maketitle
+
+\vspace{1in}
+
+\includegraphics[scale=.5, center]{planar_dual_cut.png}
+
+\include{1-Max-Cut}
+
+\include{2-Hadlock-proof}
+
+\include{3-GW-algorithm}
+
+\include{4-Discussion}
+
+\begin{thebibliography}{99}
+    \bibitem{GW} Goemans, M. X. \& Williamson, D. P. (1995). ``Improved approximation algorithms for maximum cut and satisfiability problems using semidefinite programming.'' In {\em Journal of the ACM} 42(6), 1115–1145. \\
+    https://doi.org/10.1145/227683.227684.
+    \bibitem{Hadlock} Hadlock, F. (1975). ``Finding a maximum cut of a planar graph in polynomial time.'' In {\em SIAM Journal on Computing} 4(3), 221-5. \\
+    https://doi.org/10.1137/0204019.
+    \bibitem{Karp} Karp, R. M. (1972). ``Reducibility among Combinatorial Problems.'' In: Miller, R.E., Thatcher, J.W., Bohlinger, J.D. (eds) {\em Complexity of Computer Computations}. The IBM Research Symposia Series. Springer, Boston, MA. \\ https://doi.org/10.1007/978-1-4684-2001-2\_9.
+    \bibitem{Shahriari} Shahriari, S. (2022). {\em An Invitation to Combinatorics}. Cambridge University Press, London, UK.
+    \bibitem{Vlast} Vlastelica, M., Paulus, A., Musil, V., Martius, G., \& Rolínek, M. (2019). ``Differentiation of Blackbox Combinatorial Solvers.'' \\
+    https://doi.org/10.48550/ARXIV.1912.02175.
+\end{thebibliography}
+\end{document}
