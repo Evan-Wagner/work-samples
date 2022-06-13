@@ -1,0 +1,10 @@
+
+\section{Discussion}
+
+\par While the max-cut problem will likely never be shown to be in $P$, the Goemans-Williamson reduction provides a powerful approximation and allows for meaningful analysis of large graphs. Applied repeatedly, it can illuminate even more aspects of a graph; for example, the general diffusion or concentration of weights can be characterized by the average size of an intersection of different cuts returned by the algorithm.\cite{GW} \\
+
+\par Goemans and Williamson also manipulate their procedure to find an approximation for a maximum cut on a directed graph, in which the sign on a weight depends on the order of its vertices (in other words, $w_{ij} = -w_{ji}$). Their approximation produces a solution set with optimal value 0.796. Neural networks are directed non-planar graphs, so this result might be effectively applied to analyzing their architecture. \\
+
+\par Furthermore, max-cut algorithms may prove useful as a part of the neural network itself by inserting them among the neural layers. The difficulty of using such ``combinatorial solvers'' is that their output is discrete, so the output function is piecewise-constant and its derivative is 0 at all points. \\
+
+\par Until recently, this was a prohibitive obstacle to using combinatorial solvers in DNN architecture. DNNs learn using a technique called gradient descent, which depends on the output function of each neuron having a nonzero derivative. However, some researchers showed that the piecewise-constant output function of a combinatorial solver can be interpolated to a continuous function with non-zero derivatives, allowing gradient descent to take place and improve the combinatorial solver.\cite{Vlast} If combinatorial solvers are successfully introduced into DNN architecture, many exciting applications await. 
